@@ -7,7 +7,7 @@ Ce projet consiste en la conception et la gestion d'une base de données pour la
 - Fournir une interface utilisateur pour interagir avec la base de données.
 - Développer des scripts et applications en Python pour automatiser certaines tâches.
 ## Prérequis
-- SGBD installé (MySQL, MySQL Workbench, etc.)
+- SGBD installé (SQLite)
 - Outils de développement (Terminal Linux, VS Code)
 - Connaissances en SQL et en Python
 ## Installation
