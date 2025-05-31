@@ -1,78 +1,77 @@
-import sqlite3
+-- Create database
+CREATE DATABASE HotelManagement;
+USE HotelManagement;
 
-# Connect to SQLite database
-conn = sqlite3.connect("hotel_management.db")
-cursor = conn.cursor()
-
-# Create tables based on MLD
-cursor.executescript("""
+-- Hotel table
 CREATE TABLE Hotel (
-    idHotel INTEGER PRIMARY KEY,
-    ville TEXT NOT NULL,
-    pays TEXT NOT NULL,
-    codePostal INTEGER NOT NULL
+    idHotel INT PRIMARY KEY,
+    ville VARCHAR(50) NOT NULL,
+    pays VARCHAR(50) NOT NULL,
+    codePostal INT NOT NULL
 );
 
+-- Client table
 CREATE TABLE Client (
-    idClient INTEGER PRIMARY KEY,
-    adresse TEXT NOT NULL,
-    ville TEXT NOT NULL,
-    codePostal INTEGER NOT NULL,
-    email TEXT NOT NULL,
-    telephone TEXT NOT NULL,
-    nom TEXT NOT NULL
+    idClient INT PRIMARY KEY,
+    adresse VARCHAR(100) NOT NULL,
+    ville VARCHAR(50) NOT NULL,
+    codePostal INT NOT NULL,
+    email VARCHAR(100) NOT NULL,
+    telephone INT NOT NULL,
+    NomComplet VARCHAR(100) NOT NULL
 );
 
+-- Prestation table
 CREATE TABLE Prestation (
-    idPrestation INTEGER PRIMARY KEY,
-    prix INTEGER NOT NULL,
-    libellé TEXT NOT NULL
+    idPrestation INT PRIMARY KEY,
+    prix INT NOT NULL,
+    libellé VARCHAR(50) NOT NULL
 );
 
+-- TypeChambre table
 CREATE TABLE TypeChambre (
-    idTypeChambre INTEGER PRIMARY KEY,
-    libellé TEXT NOT NULL,
-    prix INTEGER NOT NULL
+    idTypeChambre INT PRIMARY KEY,
+    type VARCHAR(50) NOT NULL,
+    Tarif INT NOT NULL
 );
 
+-- Chambre table
 CREATE TABLE Chambre (
-    idChambre INTEGER PRIMARY KEY,
-    numero INTEGER NOT NULL,
-    etage INTEGER NOT NULL,
-    estReservee INTEGER NOT NULL,
-    idHotel INTEGER NOT NULL,
-    idTypeChambre INTEGER NOT NULL,
+    idChambre INT PRIMARY KEY,
+    numero INT NOT NULL,
+    etage INT NOT NULL,
+    estReservee BOOLEAN NOT NULL,
+    idHotel INT NOT NULL,
+    idTypeChambre INT NOT NULL,
     FOREIGN KEY (idHotel) REFERENCES Hotel(idHotel),
     FOREIGN KEY (idTypeChambre) REFERENCES TypeChambre(idTypeChambre)
 );
 
+-- Réservation table
 CREATE TABLE Réservation (
-    idRéservation INTEGER PRIMARY KEY,
-    dateArrivée TEXT NOT NULL,
-    dateDépart TEXT NOT NULL,
-    idClient INTEGER NOT NULL,
-    idChambre INTEGER NOT NULL,
+    idRéservation INT PRIMARY KEY,
+    dateArrivée DATE NOT NULL,
+    dateDépart DATE NOT NULL,
     FOREIGN KEY (idClient) REFERENCES Client(idClient),
-    FOREIGN KEY (idChambre) REFERENCES Chambre(idChambre)
 );
 
+-- Évaluation table
 CREATE TABLE Évaluation (
-    idÉvaluation INTEGER PRIMARY KEY,
-    dateÉvaluation TEXT NOT NULL,
-    note INTEGER NOT NULL,
+    idÉvaluation INT PRIMARY KEY,
+    dateÉvaluation DATE NOT NULL,
+    note INT NOT NULL,
     commentaire TEXT,
-    idClient INTEGER NOT NULL,
-    FOREIGN KEY (idClient) REFERENCES Client(idClient)
+    idClient INT NOT NULL,
+    FOREIGN KEY (idClient) REFERENCES Client(idClient),
+    FOREIGN KEY (idHotel) REFRENCES Hotel(idHotel)
 );
-""")
 
-# Insert data from annexe
-cursor.executescript("""
+-- Insert data from annexe
 INSERT INTO Hotel VALUES
 (1, 'Paris', 'France', 75001),
 (2, 'Lyon', 'France', 69002);
 
-INSERT INTO Client VALUES
+INSERT INTO Client VALUES 
 (1, '12 Rue de Paris', 'Paris', 75001, 'jean.dupont@email.fr', '0612345678', 'Jean Dupont'),
 (2, '5 Avenue Victor Hugo', 'Lyon', 69002, 'marie.leroy@email.fr', '0623456789', 'Marie Leroy'),
 (3, '8 Boulevard Saint-Michel', 'Marseille', 13005, 'paul.moreau@email.fr', '0634567890', 'Paul Moreau'),
@@ -116,10 +115,3 @@ INSERT INTO Évaluation VALUES
 (3, '2025-08-10', 3, 'Séjour correct mais bruyant la nuit.', 3),
 (4, '2025-09-05', 5, 'Service impeccable, je recommande.', 4),
 (5, '2025-09-20', 4, 'Très bon petit-déjeuner, hôtel bien situé.', 5);
-""")
-
-# Commit and close
-conn.commit()
-conn.close()
-
-print("SQLite database created and populated successfully.")
