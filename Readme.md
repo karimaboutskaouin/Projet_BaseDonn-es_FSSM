@@ -44,10 +44,7 @@ Ce projet consiste en la conception et la gestion d'une base de données pour la
 
 ## Auteurs
 
-
 - Hanane Inhid
 - Karima Boutskaouin
 
-## Licence
 
-Ce projet est sous licence MIT.
